@@ -1,0 +1,4 @@
+site_name: Bookmark
+site_url: https://github.com/hottellbt/bookmark
+nav:
+    - Home: index.md

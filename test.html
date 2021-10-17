@@ -1,0 +1,101 @@
+<h1 id="bookmark">Bookmark</h1>
+<p>Bookmark is a short Python script that simplifies user input in shell scripts by translating short, easy to type “bookmarks” to lengthy strings of text. It is intended for use with <a href="https://tools.suckless.org/dmenu/">dmenu</a>, though dmenu is not required.</p>
+<h2 id="features">Features</h2>
+<ul class="incremental">
+<li>Single file, works out of the box with no dependencies (besides Python 3)</li>
+<li>Easy to use in shell scripts</li>
+<li>Works well with <a href="https://tools.suckless.org/dmenu/">dmenu</a></li>
+<li>Easy bookmark definition syntax</li>
+<li>Examples included below work without any additional configuration!</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>This Usage section goes into detail about the script’s inner workings. It expects familiarity with shell scripting. Some users may find it easier to skip to the Examples section to learn by doing.</p>
+<p>Bookmark takes two inputs: a list of bookmark definitions, and optionally a name of a bookmark to resolve against those bookmark definitions.</p>
+<p>will output the resolved text of the bookmark that the user selected, and/or a list of options the user can select from, and/or nothing depending on the arguments given.</p>
+<p>The list of bookmark definitions can either be read from standard input, or from a pre-existing text file. You should use standard input when reading the piped output from another command, such as <code>awk</code> or <code>cat</code>. You should use a text file when the bookmark definitions are already known.</p>
+<ul class="incremental">
+<li>To read the bookmark definitions from standard input, use <code>-F</code>.</li>
+<li>To read the bookmark definitions from a file, use <code>-f [FILE_PATH]</code></li>
+</ul>
+<p>The user’s chosen bookmark can be read from standard input, read from a command line argument, or omitted entirely. Only one of these strategies may be chosen.</p>
+<ul class="incremental">
+<li>To read from standard input, add the <code>-B</code> argument</li>
+<li>To read directly from the program arguments, use <code>-b [BOOKMARK]</code></li>
+<li>To omit the bookmark, do not add <code>-B</code> or <code>-b</code></li>
+</ul>
+<h3 id="bookmark-definitions">Bookmark Definitions</h3>
+<p>Bookmarks are defined and stored in text files using the following rules:</p>
+<ul class="incremental">
+<li>Each line contains one bookmark-to-result pair
+<ul class="incremental">
+<li>The bookmark comes first, then one or more whitespace characters, then the lengthy text it represents (see the <a href="#examples">examples</a> below.</li>
+<li>Bookmarks cannot contain whitespace, though the text they represent can.</li>
+</ul></li>
+<li>Leading and trailing whitespace is removed from each line</li>
+<li>Lines that start with <code>#</code> are ignored (use this for comments)</li>
+<li>Empty lines are ignored</li>
+</ul>
+<h3 id="output">Output</h3>
+<p>Bookmark will output the following:</p>
+<ul class="incremental">
+<li>If the <code>-l</code> or <code>-L</code> options are specified, then the short names of each bookmark are printed to stdout or stderr respectively. Both <code>-l</code> and <code>-L</code> can be enabled at the same time, though likely you will only need one at a time.</li>
+<li>If a bookmark’s short text is given via <code>-b</code> or <code>-B</code>, then the corresponding long text will be printed to stdout. If no matching entry is found, then nothing is printed.</li>
+</ul>
+<p>If <code>-l</code>, <code>-L</code>, <code>-b</code>, and <code>-B</code> are all ommitted, then the program will print nothing to stdout.</p>
+<h2 id="examples">Examples</h2>
+<p>This section is written incrementally, which each example building on the prior. These examples all assume a file exists named <code>bm.txt</code> with the following content:</p>
+<pre><code>asulearn        https://asulearn.appstate.edu
+appalnet        https://appalnet.appstate.edu
+library         https://library.appstate.edu
+wikipedia       https://en.wikipedia.org/
+wiktionary      https://en.wiktionary.org/
+github          https://github.com/</code></pre>
+<p>Each example also assumes some familiarity with shell scripting using Bash (or an equivalent shell).</p>
+<h3 id="example-display-the-names-of-the-bookmarks">Example: Display the names of the bookmarks</h3>
+<ul class="incremental">
+<li>Script: <code>python3 bookmark.py -f bm.txt -l</code></li>
+<li>Output:</li>
+</ul>
+<pre><code>asulearn
+appalnet
+library
+wikipedia
+wiktionary</code></pre>
+<h3 id="example-display-the-names-then-let-the-user-type-which-one-they-want">Example: Display the names, then let the user type which one they want</h3>
+<ul class="incremental">
+<li>Script: <code>python3 bookmark.py -f bm.txt -l -B</code></li>
+<li>Input: <code>library</code></li>
+<li>Output: <code>https://library.appstate.edu</code></li>
+</ul>
+<h3 id="example-open-the-users-selection-in-firefox">Example: Open the user’s selection in Firefox</h3>
+<ul class="incremental">
+<li>Script: <code>firefox $(python3 bookmark.py -f bm.txt -L -B)</code></li>
+<li>Input: <code>wiktionary</code></li>
+<li>Result: Firefox starts and goes to wiktionary</li>
+</ul>
+<h3 id="example-open-the-users-selection-in-firefox-using-dmenu">Example: Open the user’s selection in Firefox (using dmenu)</h3>
+<ul class="incremental">
+<li>Script: <code>firefox $(python3 bookmark.py -f bm.txt -l | dmenu | python3 bookmark.py -f bm.txt -B)</code></li>
+<li>Result: dmenu opens, prompts the user for their selection, then firefox is opened</li>
+</ul>
+<h3 id="example-easier-scripting-with-an-alias">Example: Easier scripting with an alias</h3>
+<p>At this point, the syntax becomes unwieldy. You may opt to create an entry in your <code>.bashrc</code> or <code>.bash_aliases</code> file to reduce the length of each line.</p>
+<p>Here, I create an alias named <code>web_bm</code>, short for “web bookmarks”.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># .bashrc</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="bu">alias</span> <span class="st">&quot;web_bm&quot;</span>=<span class="st">&quot;python3 bookmark.py -f bm.txt&quot;</span></a></code></pre></div>
+<p>Thus, the prior example can be simplified to</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="ex">firefox</span> <span class="va">$(</span><span class="ex">web_bm</span> -l <span class="kw">|</span> <span class="ex">dmenu</span> <span class="kw">|</span> <span class="ex">web_bm</span> -B<span class="va">)</span></a></code></pre></div>
+<h2 id="installation">Installation</h2>
+<p>This is a standalone Python script, so no installation is necessary. You may store this script anywhere, and run it from anywhere. I personally recommend you place it in a <code>scripts</code> folder in your home directly and create an alias to run it in your <code>.bashrc</code> file, like so:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># .bashrc</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="bu">alias</span> <span class="st">&quot;bookmark&quot;</span>=<span class="st">&quot;python3 </span><span class="va">$HOME</span><span class="st">/scripts/bookmark.py&quot;</span></a></code></pre></div>
+<p>You might opt to create additional aliases to refer to frequently accessed bookmark files:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># .bashrc</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="bu">alias</span> <span class="st">&quot;web_bm&quot;</span>=<span class="st">&quot;python3 </span><span class="va">$HOME</span><span class="st">/scripts/bookmark.py -f </span><span class="va">$HOME</span><span class="st">/.web_bookmarks&quot;</span></a></code></pre></div>
+<h2 id="support">Support</h2>
+<p>To report bugs, ask questions, or request features, please open an issue in the project’s <a href="https://github.com/hottellbt/bookmark/issues">Issue Tracker</a>.</p>
+<h2 id="how-to-contribute">How to Contribute</h2>
+<p>Please create pull requests on the project’s <a href="https://github.com/hottellbt/bookmark">GitHub repository</a>.</p>
+<p>Note that if your pull request is rejected, you are welcome to fork the project and continue developing your own version.</p>
+<h2 id="license">License</h2>
+<p><a href="https://mit-license.org/">MIT License</a></p>
