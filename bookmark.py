@@ -1,5 +1,13 @@
 #!/usr/bin/python3
 
+# bookmark.py
+# MIT license: https://mit-license.org/
+
+# Copyright © 2021 hottellbt
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 import argparse
 import sys
 import os
@@ -59,7 +67,12 @@ def main():
 
     argp.add_argument(
         "-l", "--list",
-        help="list available bookmarks before reading from stdin",
+        help="print bookmark names to stdout. runs alongside -L if present",
+        action="store_true")
+
+    argp.add_argument(
+        "-L", "--list-stderr",
+        help="print bookmark names to stderr. runs alongside -l if present.",
         action="store_true")
 
     argp.add_argument(
@@ -103,7 +116,7 @@ def main():
             if len(ln) == 0 or ln[0] == '#':
                 continue
 
-            parsed_bookmark = ln.rsplit(maxsplit=1)
+            parsed_bookmark = ln.split(maxsplit=1)
 
             if len(parsed_bookmark) != 2:
                 eprint(f"syntax error on line {line_num}")
@@ -119,6 +132,10 @@ def main():
     if args.list:
         for bookmark in bookmarks:
             print(bookmark[0])
+
+    if args.list_stderr:
+        for bookmark in bookmarks:
+            print(bookmark[0], file=sys.stderr)
 
     if args.bookmark_stdin:
         my_bookmark = input().strip()
