@@ -1,0 +1,7 @@
+# This is an example file
+
+asulearn        https://asulearn.appstate.edu
+appalnet        https://appalnet.appstate.edu
+library         https://library.appstate.edu
+wikipedia       https://en.wikipedia.org/
+wiktionary      https://en.wiktionary.org/
