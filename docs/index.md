@@ -15,6 +15,40 @@ Features
 - Easy bookmark definition syntax
 - Examples included below work without any additional configuration!
 
+Description of Equipment & List of Materials
+--------------------------------------------
+
+1. A text editor
+2. Python 3 installed
+3. A shell to type commands into
+4. The Bookmark script
+
+### A text editor
+
+You will need a text editor to edit your bookmarks, which are stored in
+plain text files. Any simple editor such as `nano`, `vi`, etc. will work.
+
+### Python 3
+
+Python 3 can be downloaded and installed from [python.org] or installed via the
+package manager that came with your Linux distribution. Please refer to your
+distribution's documentation for the details of your particular package manager.
+
+To check your version of Python, use `python --version` or `python3 --version`,
+depending on how Python was installed on your system.
+
+### A shell
+
+You will most likely use Bookmark in the shell, since there is no GUI. Shells
+include `bash`, `zsh`, `dash`, etc. To see the shells you have access to, run
+`cat /etc/shells`. To see the shell you are currently using, run `echo $0`.
+As long as your shell of choice can execute Python, then it should work.
+
+### The Bookmark script
+
+You can download the Bookmark script from the 
+[GitHub repository](https://github.com/hottellbt/bookmark).
+
 Usage
 -----
 
@@ -105,7 +139,6 @@ wikipedia
 wiktionary
 ```
 
-
 ### Example: Display the names, then let the user type which one they want
 
 - Script: `python3 bookmark.py -f bm.txt -l -B`
@@ -117,13 +150,14 @@ wiktionary
 
 - Script: `firefox $(python3 bookmark.py -f bm.txt -L -B)`
 - Input: `wiktionary`
-- Result: Firefox starts and goes to wiktionary
+- Result: Firefox starts and opens Wiktionary in a new tab
 
 
 ### Example: Open the user's selection in Firefox (using dmenu)
 
 - Script: `firefox $(python3 bookmark.py -f bm.txt -l | dmenu | python3 bookmark.py -f bm.txt -B)`
-- Result: dmenu opens, prompts the user for their selection, then firefox is opened
+- Result: dmenu opens, prompts the user for their selection, then firefox is
+  started with the user's selection open in a new tab
 
 
 ### Example: Easier scripting with an alias
@@ -143,7 +177,6 @@ Thus, the prior example can be simplified to
 ```bash
 firefox $(web_bm -l | dmenu | web_bm -B)
 ```
-
 
 Installation
 ------------
@@ -166,13 +199,11 @@ bookmark files:
 alias "web_bm"="python3 $HOME/scripts/bookmark.py -f $HOME/.web_bookmarks"
 ```
 
-
 Support
 -------
 
 To report bugs, ask questions, or request features, please open an issue in
 the project's [Issue Tracker](https://github.com/hottellbt/bookmark/issues).
-
 
 How to Contribute
 -----------------
@@ -183,6 +214,32 @@ Please create pull requests on the project's
 Note that if your pull request is rejected, you are welcome to fork the
 project and continue developing your own version.
 
+FAQs
+----
+
+### Is it open source?
+
+Yes, under the [MIT License](https://mit-license.org/).
+
+### Does this replace my web browser's bookmarks?
+
+This script is entirely independent from your web browser. You can use it
+to launch your web browser, but it will not impact your web browser in any
+other way. So, no, it will not replace your web browser's bookmarks.
+
+### Does it work on Windows?
+
+Most likely, given that Python works on Windows and this script does not make
+any OS-specific calls, though it was only tested on and designed for Linux. It
+also assumes you will be using a shell of some kind, which is probably not
+as useful or common in Windows.
+
+### Does the script use a GUI?
+
+No, the script is only meant to be used in a shell, and is meant to be part
+of a larger script that _could_ create a GUI. I originally intended for the
+script's output to be piped into [dmenu](https://tools.suckless.org/dmenu/), but
+the script does not depend on dmenu and could be used with any other program.
 
 License
 -------
