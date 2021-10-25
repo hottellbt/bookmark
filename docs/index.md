@@ -6,6 +6,8 @@ by translating short, easy to type "bookmarks" to lengthy strings of text. It
 is intended for use with [dmenu](https://tools.suckless.org/dmenu/), though
 dmenu is not required.
 
+Check it out at [GitHub](https://github.com/hottellbt/bookmark).
+
 Features
 --------
 
@@ -30,12 +32,16 @@ plain text files. Any simple editor such as `nano`, `vi`, etc. will work.
 
 ### Python 3
 
-Python 3 can be downloaded and installed from [python.org] or installed via the
-package manager that came with your Linux distribution. Please refer to your
-distribution's documentation for the details of your particular package manager.
+Python 3 can be downloaded and installed from
+[python.org](http://www.python.org) or installed via the package manager
+that came with your Linux distribution. Please refer to your distribution's
+documentation for the details of your particular package manager.
 
 To check your version of Python, use `python --version` or `python3 --version`,
-depending on how Python was installed on your system.
+depending on how Python was installed on your system, taking note that `python`
+and `python3` may or may not point to the same executable.
+
+![illustration of python and python3](./scst_python_version.png)
 
 ### A shell
 
@@ -69,6 +75,8 @@ Bookmarks are defined and stored in text files using the following rules:
 - Leading and trailing whitespace characteres are removed from each line
 - Lines that start with `#` are ignored.
 - Empty lines are ignored.
+
+![example of a file open in neovim](./scst_bmtxt.png)
 
 ### Input
 
@@ -128,8 +136,13 @@ Each example also assumes some familiarity with shell scripting using Bash
 
 ### Example: Display the names of the bookmarks
 
-- Script: `python3 bookmark.py -f bm.txt -l`
-- Output: 
+Script:
+
+```
+python3 bookmark.py -f bm.txt -l
+```
+
+Output: 
 
 ```
 asulearn
@@ -141,23 +154,54 @@ wiktionary
 
 ### Example: Display the names, then let the user type which one they want
 
-- Script: `python3 bookmark.py -f bm.txt -l -B`
-- Input: `library`
-- Output: `https://library.appstate.edu`
+Script:
+
+```
+python3 bookmark.py -f bm.txt -l -B
+```
+
+Input:
+
+```
+library
+```
+
+Output:
+
+```
+https://library.appstate.edu
+```
 
 
 ### Example: Open the user's selection in Firefox
 
-- Script: `firefox $(python3 bookmark.py -f bm.txt -L -B)`
-- Input: `wiktionary`
-- Result: Firefox starts and opens Wiktionary in a new tab
+Script:
+
+```
+firefox $(python3 bookmark.py -f bm.txt -L -B)
+```
+
+Input:
+
+```
+wiktionary
+```
+
+Result: Firefox starts and opens Wiktionary in a new tab
 
 
 ### Example: Open the user's selection in Firefox (using dmenu)
 
-- Script: `firefox $(python3 bookmark.py -f bm.txt -l | dmenu | python3 bookmark.py -f bm.txt -B)`
-- Result: dmenu opens, prompts the user for their selection, then firefox is
-  started with the user's selection open in a new tab
+Script:
+
+```
+firefox $(python3 bookmark.py -f bm.txt -l | dmenu | python3 bookmark.py -f bm.txt -B)
+```
+
+Result: dmenu opens, prompts the user for their selection, then firefox is
+started with the user's selection open in a new tab
+
+![dmenu shows my options](./scst_dmenu.png)
 
 
 ### Example: Easier scripting with an alias
